@@ -1,5 +1,8 @@
 # SemanticKernel.Connectors.GeminiDotnet
 
+[![CI](https://github.com/Cozmopolit/SemanticKernel.Connectors.GeminiDotnet/actions/workflows/ci.yml/badge.svg)](https://github.com/Cozmopolit/SemanticKernel.Connectors.GeminiDotnet/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A [Semantic Kernel](https://github.com/microsoft/semantic-kernel) connector for Google Gemini using [GeminiDotnet](https://github.com/rabuckley/GeminiDotnet).
 
 ## Features
