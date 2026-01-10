@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+
+    <!-- Suppress experimental SK API warnings -->
+    <NoWarn>$(NoWarn);SKEXP0001</NoWarn>
+
+    <!-- NuGet Package Settings -->
+    <IsPackable>true</IsPackable>
+    <PackageId>SemanticKernel.Connectors.GeminiDotnet</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Cozmopolit</Authors>
+    <Description>A Semantic Kernel connector for Google Gemini using GeminiDotnet. Supports Gemini 2.5/3 Pro with thinking, function calling, and streaming. Based on Microsoft.Extensions.AI architecture.</Description>
+    <PackageTags>Semantic Kernel;Gemini;Google AI;LLM;AI;Microsoft.Extensions.AI;ChatCompletion</PackageTags>
+    <PackageProjectUrl>https://github.com/Cozmopolit/SemanticKernel.Connectors.GeminiDotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Cozmopolit/SemanticKernel.Connectors.GeminiDotnet</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GeminiDotnet.Extensions.AI" Version="0.20.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.4" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.68.0" />
+  </ItemGroup>
+
+</Project>
+
