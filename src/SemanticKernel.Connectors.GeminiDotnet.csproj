@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -12,7 +12,7 @@
     <!-- NuGet Package Settings -->
     <IsPackable>true</IsPackable>
     <PackageId>SemanticKernel.Connectors.GeminiDotnet</PackageId>
-    <Version>1.0.0</Version>
+    <Version>0.1.0</Version>
     <Authors>Cozmopolit</Authors>
     <Description>A Semantic Kernel connector for Google Gemini using GeminiDotnet. Supports Gemini 2.5/3 Pro with thinking, function calling, and streaming. Based on Microsoft.Extensions.AI architecture.</Description>
     <PackageTags>Semantic Kernel;Gemini;Google AI;LLM;AI;Microsoft.Extensions.AI;ChatCompletion</PackageTags>

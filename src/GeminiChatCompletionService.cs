@@ -45,7 +45,7 @@ public sealed class GeminiChatCompletionService : IChatCompletionService, ITextG
     private readonly IChatCompletionService _innerService;
     private readonly Dictionary<string, object?> _attributes = new();
     private readonly ILogger _logger;
-    private bool _disposed;
+    private int _disposed;
 
     /// <summary>
     /// Create an instance of the Gemini chat completion connector with M.E.AI architecture.
@@ -76,11 +76,22 @@ public sealed class GeminiChatCompletionService : IChatCompletionService, ITextG
         IGeminiClient geminiClient;
         if (httpClient != null)
         {
-            // Configure HttpClient with Gemini API requirements
+            // Configure HttpClient with Gemini API requirements (only if not already configured)
+            // This is defensive: if caller provides a pre-configured client, we respect their settings
             httpClient.BaseAddress ??= new Uri("https://generativelanguage.googleapis.com");
-            httpClient.Timeout = Timeout.InfiniteTimeSpan; // Prevent timeouts on long LLM generations
-            httpClient.DefaultRequestHeaders.Remove("x-goog-api-key");
-            httpClient.DefaultRequestHeaders.Add("x-goog-api-key", apiKey);
+
+            // Only set timeout if it's the default (100 seconds) - respect caller's explicit timeout
+            if (httpClient.Timeout == TimeSpan.FromSeconds(100))
+            {
+                httpClient.Timeout = Timeout.InfiniteTimeSpan; // Prevent timeouts on long LLM generations
+            }
+
+            // API key header - set if not already present (caller's pre-configured client is respected)
+            if (!httpClient.DefaultRequestHeaders.Contains("x-goog-api-key"))
+            {
+                httpClient.DefaultRequestHeaders.Add("x-goog-api-key", apiKey);
+            }
+
             geminiClient = new GeminiClient(httpClient, modelId);
         }
         else
@@ -194,15 +205,15 @@ public sealed class GeminiChatCompletionService : IChatCompletionService, ITextG
 
     /// <summary>
     /// Disposes the service and releases the underlying chat client resources.
+    /// Thread-safe: multiple calls are safe, only the first call disposes resources.
     /// </summary>
     public void Dispose()
     {
-        if (this._disposed)
+        if (Interlocked.Exchange(ref this._disposed, 1) == 1)
         {
             return;
         }
 
-        this._disposed = true;
         this._chatClient.Dispose();
     }
 
