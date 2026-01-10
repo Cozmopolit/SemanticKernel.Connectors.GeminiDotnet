@@ -18,8 +18,15 @@
     <PackageTags>Semantic Kernel;Gemini;Google AI;LLM;AI;Microsoft.Extensions.AI;ChatCompletion</PackageTags>
     <PackageProjectUrl>https://github.com/Cozmopolit/SemanticKernel.Connectors.GeminiDotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Cozmopolit/SemanticKernel.Connectors.GeminiDotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <!-- SourceLink for debugging -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>

@@ -13,8 +13,30 @@ A [Semantic Kernel](https://github.com/microsoft/semantic-kernel) connector for 
 
 ## Installation
 
+### From GitHub Packages
+
+1. Add the GitHub Packages source to your NuGet configuration:
+
+```bash
+dotnet nuget add source "https://nuget.pkg.github.com/Cozmopolit/index.json" --name "github-cozmopolit" --username YOUR_GITHUB_USERNAME --password YOUR_GITHUB_PAT
+```
+
+2. Install the package:
+
 ```bash
 dotnet add package SemanticKernel.Connectors.GeminiDotnet
+```
+
+### As Git Submodule
+
+```bash
+git submodule add https://github.com/Cozmopolit/SemanticKernel.Connectors.GeminiDotnet.git
+```
+
+Then add a ProjectReference in your `.csproj`:
+
+```xml
+<ProjectReference Include="path/to/SemanticKernel.Connectors.GeminiDotnet/src/SemanticKernel.Connectors.GeminiDotnet.csproj" />
 ```
 
 ## Usage
