@@ -5,7 +5,7 @@
 
   <ItemGroup>
     <!-- src -->
-    <PackageVersion Include="GeminiDotnet.Extensions.AI" Version="0.20.0" />
+    <PackageVersion Include="GeminiDotnet.Extensions.AI" Version="0.22.0" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.6" />
     <PackageVersion Include="Microsoft.SemanticKernel" Version="1.70.0" />
 
