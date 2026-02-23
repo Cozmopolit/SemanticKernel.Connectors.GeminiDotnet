@@ -7,7 +7,7 @@
     <!-- src -->
     <PackageVersion Include="GeminiDotnet.Extensions.AI" Version="0.22.0" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.6" />
-    <PackageVersion Include="Microsoft.SemanticKernel" Version="1.70.0" />
+    <PackageVersion Include="Microsoft.SemanticKernel" Version="1.72.0" />
 
     <!-- tests -->
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
