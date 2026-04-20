@@ -55,12 +55,16 @@ public sealed class GeminiChatCompletionService : IChatCompletionService, ITextG
     /// <param name="endpointId">Optional endpoint identifier for telemetry</param>
     /// <param name="httpClient">Custom <see cref="HttpClient"/> for HTTP requests.</param>
     /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> to use for logging.</param>
+    /// <param name="defaultChatOptions">Optional default <see cref="ChatOptions"/> merged into every request.
+    /// Used to inject provider-specific settings (e.g., ThinkingConfiguration from ProviderSpecificData).
+    /// Request-level options take precedence over these defaults.</param>
     public GeminiChatCompletionService(
         string modelId,
         string apiKey,
         string? endpointId = null,
         HttpClient? httpClient = null,
-        ILoggerFactory? loggerFactory = null)
+        ILoggerFactory? loggerFactory = null,
+        ChatOptions? defaultChatOptions = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(modelId);
         ArgumentException.ThrowIfNullOrWhiteSpace(apiKey);
@@ -106,7 +110,25 @@ public sealed class GeminiChatCompletionService : IChatCompletionService, ITextG
 
         // 2. Build M.E.AI Pipeline with GeminiChatClient
         var builder = new GeminiChatClient(geminiClient)
-            .AsBuilder()
+            .AsBuilder();
+
+        // Inject provider-specific default ChatOptions (e.g., ThinkingConfiguration from ProviderSpecificData).
+        // Uses the same .Use() middleware pattern as the Anthropic connector's Temperature/TopP handling.
+        if (defaultChatOptions?.AdditionalProperties is { Count: > 0 })
+        {
+            var defaults = defaultChatOptions;
+            this._logger.LogDebug(
+                "Gemini pipeline middleware configured with {Count} default AdditionalProperties for EndpointId={EndpointId}",
+                defaults.AdditionalProperties.Count, endpointId);
+
+            builder.Use(async (messages, options, next, cancellationToken) =>
+            {
+                options = MergeWithDefaults(options, defaults);
+                await next(messages, options, cancellationToken).ConfigureAwait(false);
+            });
+        }
+
+        builder
             .UseKernelFunctionInvocation(loggerFactory) // SK Filter-Integration for IAutoFunctionInvocationFilter
             .UseOpenTelemetry(loggerFactory, sourceName: "SemanticKernel.Connectors.GeminiDotnet")
             .UseLogging(loggerFactory);
@@ -197,6 +219,34 @@ public sealed class GeminiChatCompletionService : IChatCompletionService, ITextG
                 Encoding.UTF8,
                 chunk.Metadata);
         }
+    }
+
+    #endregion
+
+    #region Private Helpers
+
+    /// <summary>
+    /// Merges default <see cref="ChatOptions"/> into per-request options.
+    /// Request-level values take precedence — defaults are only applied for keys not already present.
+    /// </summary>
+    private static ChatOptions MergeWithDefaults(ChatOptions? options, ChatOptions defaults)
+    {
+        options = options?.Clone() ?? new ChatOptions();
+
+        if (defaults.AdditionalProperties is { Count: > 0 } defaultProps)
+        {
+            options.AdditionalProperties ??= new AdditionalPropertiesDictionary();
+
+            foreach (var kvp in defaultProps)
+            {
+                if (!options.AdditionalProperties.ContainsKey(kvp.Key))
+                {
+                    options.AdditionalProperties[kvp.Key] = kvp.Value;
+                }
+            }
+        }
+
+        return options;
     }
 
     #endregion
